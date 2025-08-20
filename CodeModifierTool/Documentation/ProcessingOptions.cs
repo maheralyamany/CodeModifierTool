@@ -4,6 +4,7 @@
 		public bool AddConstructorSummaries { get; set; } = true;
 		public bool AddMethodSummaries { get; set; } = true;
 		public bool AddPropertySummaries { get; set; } = true;
+		public bool AddAutoPropertySummaries { get; set; } = false;
 		public bool AddInterfaceSummaries { get; set; } = true;
 		public bool AddStructSummaries { get; set; } = true;
 		public bool AddEnumSummaries { get; set; } = true;

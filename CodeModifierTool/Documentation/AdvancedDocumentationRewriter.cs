@@ -65,6 +65,9 @@ public class AdvancedDocumentationRewriter : BaseCodeSyntaxRewriter {
 	}
 	public override SyntaxNode VisitPropertyDeclaration(PropertyDeclarationSyntax node) {
 		var visitedNode = (PropertyDeclarationSyntax)base.VisitPropertyDeclaration(node);
+		if ((visitedNode.ExpressionBody == null && !GetOptions().AddAutoPropertySummaries) && HasDocumentation(node))
+			return WithoutLeadingTrivia(visitedNode);
+
 		if (ShouldSkip(visitedNode) || !GetOptions().AddPropertySummaries) return visitedNode;
 		return GenerateDocumentation(visitedNode);
 	}
@@ -96,17 +99,8 @@ public class AdvancedDocumentationRewriter : BaseCodeSyntaxRewriter {
 	public override SyntaxNode VisitFieldDeclaration(FieldDeclarationSyntax node) {
 		var visitedNode = (FieldDeclarationSyntax)base.VisitFieldDeclaration(node);
 		if (!GetOptions().AddFieldSummaries) {
-			var existingTrivia = visitedNode.GetLeadingTrivia().ToList();
-			if (existingTrivia.Count > 0) {
-				var nonDocTrivia = existingTrivia
-					.Where(t => !t.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia) &&
-							   !t.IsKind(SyntaxKind.MultiLineDocumentationCommentTrivia))
-					.ToList();
-				if (nonDocTrivia.Count > 0)
-					return WithLeadingTrivia(node, nonDocTrivia);
-			}
 
-			return visitedNode.WithoutLeadingTrivia();
+			return WithoutLeadingTrivia(visitedNode);
 		} else if (ShouldSkip(node))
 			return visitedNode;
 		return GenerateDocumentation(visitedNode);
@@ -119,6 +113,19 @@ public class AdvancedDocumentationRewriter : BaseCodeSyntaxRewriter {
 		if (GetOptions().SkipGeneratedFiles && IsGeneratedCode(node))
 			return true;
 		return false;
+	}
+	private T WithoutLeadingTrivia<T>(T node) where T : MemberDeclarationSyntax {
+		var existingTrivia = node.GetLeadingTrivia().ToList();
+		if (existingTrivia.Count > 0) {
+			var nonDocTrivia = existingTrivia
+				.Where(t => !t.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia) &&
+						   !t.IsKind(SyntaxKind.MultiLineDocumentationCommentTrivia))
+				.ToList();
+			if (nonDocTrivia.Count > 0)
+				return WithLeadingTrivia(node, nonDocTrivia);
+		}
+
+		return node.WithoutLeadingTrivia();
 	}
 	private T GenerateDocumentation<T>(T node) where T : MemberDeclarationSyntax {
 		var documentation = GetCommentGenerator().GenerateDocumentation(node);

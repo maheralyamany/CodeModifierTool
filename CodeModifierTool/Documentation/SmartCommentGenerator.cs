@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -339,19 +338,9 @@ public class SmartCommentGenerator {
 		return str.Substring(startIndex, length);
 	}
 	private static string SplitCamelCase(string input) {
-		if (string.IsNullOrEmpty(input))
-			return input;
-		var result = new StringBuilder();
-		result.Append(char.ToLower(input[0]));
-		for (int i = 1; i < input.Length; i++) {
-			if (char.IsUpper(input[i])) {
-				result.Append(' ');
-				result.Append(char.ToLower(input[i]));
-			} else {
-				result.Append(input[i]);
-			}
-		}
-		return result.ToString();
+
+
+		return CodeFormatter.SplitCamelCase(input);
 	}
 	private static string ToLowerFirstChar(string input) {
 		if (string.IsNullOrEmpty(input))

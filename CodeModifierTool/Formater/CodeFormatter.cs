@@ -52,9 +52,31 @@ public static class CodeFormatter {
 		return cleanedCode;
 
 	}
+	public static string ConvertToTitleCase(string input) {
+		if (string.IsNullOrEmpty(input))
+			return input;
+
+		var result = new StringBuilder();
+		bool newWord = true;
+
+		foreach (char c in input) {
+			if (c == '_') {
+				result.Append(' ');
+				newWord = true;
+			} else if (newWord) {
+				result.Append(char.ToUpper(c));
+				newWord = false;
+			} else {
+				result.Append(char.ToLower(c));
+			}
+		}
+
+		return result.ToString();
+	}
 	public static string SplitCamelCase(string input) {
 		if (string.IsNullOrEmpty(input))
 			return input;
+		input = ConvertToTitleCase(input);
 		var result = new StringBuilder();
 		result.Append(char.ToLower(input[0]));
 		for (int i = 1; i < input.Length; i++) {
@@ -69,7 +91,7 @@ public static class CodeFormatter {
 	}
 	public static string ToTitle(string input) {
 
-		return ToUpperFirstChar(SplitCamelCase(input));
+		return ConvertToTitleCase(SplitCamelCase(input));
 	}
 	public static string ToUpperFirstChar(string input) {
 		if (string.IsNullOrEmpty(input))
