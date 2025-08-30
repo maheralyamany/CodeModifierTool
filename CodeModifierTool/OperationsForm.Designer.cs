@@ -28,7 +28,6 @@
 			this.label1 = new System.Windows.Forms.Label();
 			this.txtRootDirectory = new System.Windows.Forms.TextBox();
 			this.panel1 = new System.Windows.Forms.Panel();
-			this.progressBar1 = new OpetraViews.Controls.MProgressBar();
 			this.panel2 = new System.Windows.Forms.Panel();
 			this.BtnCancel = new BinarySmartButton.Controls.SmartButton();
 			this.BtnProcess = new BinarySmartButton.Controls.SmartButton();
@@ -42,6 +41,7 @@
 			this.radColumnAttribute = new System.Windows.Forms.RadioButton();
 			this.radMethodImpl = new System.Windows.Forms.RadioButton();
 			this.explorer = new OpetraViews.Controls.FileExplorerTreeView();
+			this.progressBar1 = new OpetraViews.Controls.MProgressBar();
 			this.panel1.SuspendLayout();
 			this.panel2.SuspendLayout();
 			this.panel3.SuspendLayout();
@@ -78,18 +78,6 @@
 			this.panel1.Name = "panel1";
 			this.panel1.Size = new System.Drawing.Size(912, 34);
 			this.panel1.TabIndex = 32;
-			// 
-			// progressBar1
-			// 
-			this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.progressBar1.DisplayMode = OpetraViews.Controls.ProgressTextDisplayMode.ValueOverMaximum;
-			this.progressBar1.Location = new System.Drawing.Point(5, 7);
-			this.progressBar1.Name = "progressBar1";
-			this.progressBar1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-			this.progressBar1.Size = new System.Drawing.Size(902, 20);
-			this.progressBar1.Step = 1;
-			this.progressBar1.TabIndex = 25;
 			// 
 			// panel2
 			// 
@@ -248,6 +236,7 @@
 			// explorer
 			// 
 			this.explorer.Dock = System.Windows.Forms.DockStyle.Right;
+			this.explorer.ExcludedExtensions = ".Designer.cs";
 			this.explorer.ExcludedFolders = resources.GetString("explorer.ExcludedFolders");
 			this.explorer.FilterFilesExtensions = "cs";
 			this.explorer.Location = new System.Drawing.Point(681, 35);
@@ -258,6 +247,18 @@
 			this.explorer.RootPath = "";
 			this.explorer.Size = new System.Drawing.Size(231, 369);
 			this.explorer.TabIndex = 35;
+			// 
+			// progressBar1
+			// 
+			this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.progressBar1.DisplayMode = OpetraViews.Controls.ProgressTextDisplayMode.ValueOverMaximum;
+			this.progressBar1.Location = new System.Drawing.Point(5, 7);
+			this.progressBar1.Name = "progressBar1";
+			this.progressBar1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+			this.progressBar1.Size = new System.Drawing.Size(902, 20);
+			this.progressBar1.Step = 1;
+			this.progressBar1.TabIndex = 25;
 			// 
 			// OperationsForm
 			// 

@@ -11,7 +11,7 @@ namespace CodeModifierTool {
 		static void Main() {
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			//RunOperation(SelectedOperation.SummaryComment);
+			//RunOperation(SelectedOperation.FormatCode);
 
 			Application.Run(new OperationsForm());
 			//RunApplication();
@@ -22,7 +22,7 @@ namespace CodeModifierTool {
 
 		private static void RunOperation(SelectedOperation operation) {
 			var WorkerParams = new MethodWorkerParams() {
-				CsFiles = new System.Collections.Generic.List<string>() { @"D:\OMaxSystem\M10_08_2022\OpetraERPSys\OpetraViews\Controls\FileExplorer\FileExplorerRootPathEditor.cs" }
+				CsFiles = new System.Collections.Generic.List<string>() { @"D:\OMaxSystem\M10_08_2022\OpetraERPSys\OpetraProErpSys\AN\ItemMovArgs.cs" }
 			};
 			WorkerParams.SetIsRunning(true);
 			DynamicGenerator.ProcessOperation(WorkerParams, operation);

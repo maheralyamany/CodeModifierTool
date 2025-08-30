@@ -149,8 +149,8 @@ public static class VSOptionSet {
 
 	private static readonly Dictionary<OptionKey, object> optionSetKeys = new Dictionary<OptionKey, object>() {
 		{CSharpFormattingOptions.IndentBlock, true},
-		{CSharpFormattingOptions.IndentSwitchSection, false},
-		{CSharpFormattingOptions.IndentSwitchCaseSection, false},
+		{CSharpFormattingOptions.IndentSwitchSection, true},
+		{CSharpFormattingOptions.IndentSwitchCaseSection, true},
 		{CSharpFormattingOptions.IndentBraces, false},
 		{CSharpFormattingOptions.IndentSwitchCaseSectionWhenBlock, false},
 		{CSharpFormattingOptions.NewLinesForBracesInTypes, false},
@@ -186,8 +186,8 @@ public static class VSOptionSet {
 		{CSharpFormattingOptions.SpaceAfterDot, false},
 		{CSharpFormattingOptions.SpaceBeforeComma, false},
 		{CSharpFormattingOptions.SpaceBeforeDot, false},
-		{CSharpFormattingOptions.WrappingPreserveSingleLine, false},
-		{CSharpFormattingOptions.WrappingKeepStatementsOnSingleLine, false},
+		{CSharpFormattingOptions.WrappingPreserveSingleLine, true},
+		{CSharpFormattingOptions.WrappingKeepStatementsOnSingleLine, true},
 		{CSharpFormattingOptions.NewLineForMembersInObjectInit, false},
 		{CSharpFormattingOptions.NewLineForClausesInQuery, false},
 		{CSharpFormattingOptions.NewLineForMembersInAnonymousTypes, false},
@@ -228,7 +228,7 @@ public static class VSOptionSet {
 		};
 		// --- Indentation ---
 		options = WithPerChangedOption(options, FormattingOptions.UseTabs, false);
-		//options = WithPerChangedOption(options, FormattingOptions.SmartIndent, IndentStyle.Smart);
+		options = WithPerChangedOption(options, FormattingOptions.SmartIndent, FormattingOptions.IndentStyle.Smart);
 		options = WithPerChangedOption(options, FormattingOptions.IndentationSize, 4);
 		options = WithPerChangedOption(options, FormattingOptions.TabSize, 4);
 
