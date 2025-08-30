@@ -100,13 +100,20 @@ public static class CodeFormatter {
 	}
 	public static string FormatCodeWithOptions(SyntaxNode root) {
 		// Create custom option set
-		//OptionSet optionSet = VSOptionSet.GetOptionSet(root);
-		OptionSet optionSet = null;
+		var workspace = VSOptionSet.GetAdhocWorkspace();
+		OptionSet optionSet = VSOptionSet.GetCustomOptionSet();
+		//var customOptionSetValues = VSOptionSet.GetCustomOptionSetValues();
+
+
+
+
+		//OptionSet optionSet = null;
 		// Apply formatting
-		var formatted = Formatter.Format(root, new AdhocWorkspace(), optionSet);
+		var formatted = Formatter.Format(root, workspace, optionSet);
 		// Convert to string
-		string code = formatted.NormalizeWhitespace().ToFullString();
-		code = CleanCode(code);
+		//string code = formatted.NormalizeWhitespace().ToFullString();
+		string code = formatted.ToFullString();
+		//code = CleanCode(code);
 		return code;
 	}
 	public static string FormatCodeWithOptions(string code) {

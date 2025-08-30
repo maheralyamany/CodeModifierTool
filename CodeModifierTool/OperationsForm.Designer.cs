@@ -28,6 +28,7 @@
 			this.label1 = new System.Windows.Forms.Label();
 			this.txtRootDirectory = new System.Windows.Forms.TextBox();
 			this.panel1 = new System.Windows.Forms.Panel();
+			this.progressBar1 = new OpetraViews.Controls.MProgressBar();
 			this.panel2 = new System.Windows.Forms.Panel();
 			this.BtnCancel = new BinarySmartButton.Controls.SmartButton();
 			this.BtnProcess = new BinarySmartButton.Controls.SmartButton();
@@ -35,13 +36,12 @@
 			this.txtPocoEditor = new System.Windows.Forms.RichTextBox();
 			this.panel3 = new System.Windows.Forms.Panel();
 			this.operationGroup = new System.Windows.Forms.GroupBox();
+			this.btnCommentOptions = new BinarySmartButton.Controls.SmartButton();
 			this.radComment = new System.Windows.Forms.RadioButton();
 			this.radFormatCode = new System.Windows.Forms.RadioButton();
 			this.radColumnAttribute = new System.Windows.Forms.RadioButton();
 			this.radMethodImpl = new System.Windows.Forms.RadioButton();
 			this.explorer = new OpetraViews.Controls.FileExplorerTreeView();
-			this.progressBar1 = new OpetraViews.Controls.MProgressBar();
-			this.btnCommentOptions = new BinarySmartButton.Controls.SmartButton();
 			this.panel1.SuspendLayout();
 			this.panel2.SuspendLayout();
 			this.panel3.SuspendLayout();
@@ -78,6 +78,18 @@
 			this.panel1.Name = "panel1";
 			this.panel1.Size = new System.Drawing.Size(912, 34);
 			this.panel1.TabIndex = 32;
+			// 
+			// progressBar1
+			// 
+			this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.progressBar1.DisplayMode = OpetraViews.Controls.ProgressTextDisplayMode.ValueOverMaximum;
+			this.progressBar1.Location = new System.Drawing.Point(5, 7);
+			this.progressBar1.Name = "progressBar1";
+			this.progressBar1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+			this.progressBar1.Size = new System.Drawing.Size(902, 20);
+			this.progressBar1.Step = 1;
+			this.progressBar1.TabIndex = 25;
 			// 
 			// panel2
 			// 
@@ -167,6 +179,18 @@
 			this.operationGroup.TabStop = false;
 			this.operationGroup.Text = "Operation";
 			// 
+			// btnCommentOptions
+			// 
+			this.btnCommentOptions.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.btnCommentOptions.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(60)))), ((int)(((byte)(116)))));
+			this.btnCommentOptions.Location = new System.Drawing.Point(591, 11);
+			this.btnCommentOptions.Name = "btnCommentOptions";
+			this.btnCommentOptions.Size = new System.Drawing.Size(79, 29);
+			this.btnCommentOptions.TabIndex = 2;
+			this.btnCommentOptions.Text = "Options";
+			this.btnCommentOptions.Visible = false;
+			this.btnCommentOptions.Click += new System.EventHandler(this.BtnCommentOptions_Click);
+			// 
 			// radComment
 			// 
 			this.radComment.AutoSize = true;
@@ -183,11 +207,13 @@
 			// radFormatCode
 			// 
 			this.radFormatCode.AutoSize = true;
+			this.radFormatCode.Checked = true;
 			this.radFormatCode.ForeColor = System.Drawing.Color.Black;
 			this.radFormatCode.Location = new System.Drawing.Point(287, 18);
 			this.radFormatCode.Name = "radFormatCode";
 			this.radFormatCode.Size = new System.Drawing.Size(84, 17);
 			this.radFormatCode.TabIndex = 1;
+			this.radFormatCode.TabStop = true;
 			this.radFormatCode.Tag = "FormatCode";
 			this.radFormatCode.Text = "FormatCode";
 			this.radFormatCode.UseVisualStyleBackColor = true;
@@ -209,13 +235,11 @@
 			// radMethodImpl
 			// 
 			this.radMethodImpl.AutoSize = true;
-			this.radMethodImpl.Checked = true;
 			this.radMethodImpl.ForeColor = System.Drawing.Color.Black;
 			this.radMethodImpl.Location = new System.Drawing.Point(39, 18);
 			this.radMethodImpl.Name = "radMethodImpl";
 			this.radMethodImpl.Size = new System.Drawing.Size(81, 17);
 			this.radMethodImpl.TabIndex = 0;
-			this.radMethodImpl.TabStop = true;
 			this.radMethodImpl.Tag = "MethodImpl";
 			this.radMethodImpl.Text = "MethodImpl";
 			this.radMethodImpl.UseVisualStyleBackColor = true;
@@ -235,30 +259,6 @@
 			this.explorer.Size = new System.Drawing.Size(231, 369);
 			this.explorer.TabIndex = 35;
 			// 
-			// progressBar1
-			// 
-			this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.progressBar1.DisplayMode = OpetraViews.Controls.ProgressTextDisplayMode.ValueOverMaximum;
-			this.progressBar1.Location = new System.Drawing.Point(5, 7);
-			this.progressBar1.Name = "progressBar1";
-			this.progressBar1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-			this.progressBar1.Size = new System.Drawing.Size(902, 20);
-			this.progressBar1.Step = 1;
-			this.progressBar1.TabIndex = 25;
-			// 
-			// btnCommentOptions
-			// 
-			this.btnCommentOptions.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.btnCommentOptions.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(60)))), ((int)(((byte)(116)))));
-			this.btnCommentOptions.Location = new System.Drawing.Point(591, 11);
-			this.btnCommentOptions.Name = "btnCommentOptions";
-			this.btnCommentOptions.Size = new System.Drawing.Size(79, 29);
-			this.btnCommentOptions.TabIndex = 2;
-			this.btnCommentOptions.Text = "Options";
-			this.btnCommentOptions.Visible = false;
-			this.btnCommentOptions.Click += new System.EventHandler(this.BtnCommentOptions_Click);
-			// 
 			// OperationsForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -269,6 +269,7 @@
 			this.Controls.Add(this.explorer);
 			this.Controls.Add(this.panel2);
 			this.Controls.Add(this.panel1);
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MinimizeBox = false;
 			this.Name = "OperationsForm";
 			this.Text = "Form1";

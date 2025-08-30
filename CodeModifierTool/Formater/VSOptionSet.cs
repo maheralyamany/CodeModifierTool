@@ -8,9 +8,13 @@ using Microsoft.CodeAnalysis.Options;
 
 public static class VSOptionSet {
 	private static OptionSet optionSet;
-	private static readonly OptionSet customOptionSet;
+	private static OptionSet customOptionSet;
+	private static Dictionary<OptionKey, object> customOptionSetValues = new Dictionary<OptionKey, object>();
+	private static AdhocWorkspace workspace;
 	static VSOptionSet() {
-		customOptionSet = GetCustomOptionSetInternal();
+		workspace = new AdhocWorkspace();
+
+		customOptionSet = GetCustomOptionSetInternal(workspace);
 	}
 	/// <summary>
 	/// Returns a fully populated C# OptionSet based on the current document's Visual Studio settings.
@@ -42,7 +46,18 @@ public static class VSOptionSet {
 	}
 	public static OptionSet GetOptionSet() {
 
+		//return customOptionSet;
 		return optionSet ?? customOptionSet;
+	}
+	public static OptionSet GetCustomOptionSet() {
+
+		return customOptionSet;
+
+	}
+	public static AdhocWorkspace GetAdhocWorkspace() {
+
+		return workspace;
+
 	}
 	/// <summary>
 	/// Returns a fully populated C# OptionSet based on the current document's Visual Studio settings.
@@ -132,43 +147,157 @@ public static class VSOptionSet {
 	}
 
 
-	private static OptionSet GetCustomOptionSetInternal() {
+	private static readonly Dictionary<OptionKey, object> optionSetKeys = new Dictionary<OptionKey, object>() {
+		{CSharpFormattingOptions.IndentBlock, true},
+		{CSharpFormattingOptions.IndentSwitchSection, false},
+		{CSharpFormattingOptions.IndentSwitchCaseSection, false},
+		{CSharpFormattingOptions.IndentBraces, false},
+		{CSharpFormattingOptions.IndentSwitchCaseSectionWhenBlock, false},
+		{CSharpFormattingOptions.NewLinesForBracesInTypes, false},
+		{CSharpFormattingOptions.NewLinesForBracesInMethods, false},
+		{CSharpFormattingOptions.NewLinesForBracesInProperties, false},
+		{CSharpFormattingOptions.NewLinesForBracesInAccessors, false},
 
-		var workspace = new AdhocWorkspace();
+		{CSharpFormattingOptions.NewLinesForBracesInAnonymousMethods, false},
+		{CSharpFormattingOptions.NewLinesForBracesInControlBlocks, false},
+		{CSharpFormattingOptions.NewLinesForBracesInAnonymousTypes, false},
+		{CSharpFormattingOptions.NewLinesForBracesInObjectCollectionArrayInitializers, false},
+		{CSharpFormattingOptions.NewLinesForBracesInLambdaExpressionBody, false},
+		{CSharpFormattingOptions.SpaceBetweenEmptyMethodDeclarationParentheses, false},
+		{CSharpFormattingOptions.SpaceBetweenEmptyMethodCallParentheses, false},
+		{CSharpFormattingOptions.SpaceAfterCast, false},
+		{CSharpFormattingOptions.SpaceAfterColonInBaseTypeDeclaration, false},
+		{CSharpFormattingOptions.SpaceAfterComma, false},
+		{CSharpFormattingOptions.SpaceAfterSemicolonsInForStatement, false},
+		{CSharpFormattingOptions.SpaceBeforeColonInBaseTypeDeclaration, false},
+		{CSharpFormattingOptions.SpaceBeforeSemicolonsInForStatement, false},
+		{CSharpFormattingOptions.SpaceWithinExpressionParentheses, false},
+		{CSharpFormattingOptions.SpaceWithinMethodDeclarationParenthesis, false},
+		{CSharpFormattingOptions.SpaceWithinMethodCallParentheses, false},
+		{CSharpFormattingOptions.SpaceWithinOtherParentheses, false},
+		{CSharpFormattingOptions.SpaceWithinSquareBrackets, false},
+		{CSharpFormattingOptions.SpacingAfterMethodDeclarationName, false},
+		{CSharpFormattingOptions.SpaceAfterMethodCallName, false},
+		{CSharpFormattingOptions.SpaceAfterControlFlowStatementKeyword, false},
+		{CSharpFormattingOptions.SpaceWithinCastParentheses, false},
+		{CSharpFormattingOptions.SpacesIgnoreAroundVariableDeclaration, false},
+		{CSharpFormattingOptions.SpaceBeforeOpenSquareBracket, false},
+		{CSharpFormattingOptions.SpaceBetweenEmptySquareBrackets, false},
+		{CSharpFormattingOptions.SpaceAfterDot, false},
+		{CSharpFormattingOptions.SpaceBeforeComma, false},
+		{CSharpFormattingOptions.SpaceBeforeDot, false},
+		{CSharpFormattingOptions.WrappingPreserveSingleLine, false},
+		{CSharpFormattingOptions.WrappingKeepStatementsOnSingleLine, false},
+		{CSharpFormattingOptions.NewLineForMembersInObjectInit, false},
+		{CSharpFormattingOptions.NewLineForClausesInQuery, false},
+		{CSharpFormattingOptions.NewLineForMembersInAnonymousTypes, false},
+		{CSharpFormattingOptions.NewLineForElse, false},
+		{CSharpFormattingOptions.NewLineForCatch, false},
+		{CSharpFormattingOptions.NewLineForFinally, false},
+	};
+
+
+	public static Dictionary<OptionKey, (object Old, object Def, object New)> GetCustomOptionSetValues() {
+		var options = GetCustomOptionSet();
+		var docOptions = GetOptionSet();
+		Dictionary<OptionKey, (object Old, object Def, object New)> values = new Dictionary<OptionKey, (object Old, object Def, object New)>();
+		foreach (var it in optionSetKeys) {
+
+			values.Add(it.Key, (customOptionSetValues.GetSafeValue(it.Key), docOptions.GetOption(it.Key), options.GetOption(it.Key)));
+
+		}
+		return values;
+
+	}
+	private static OptionSet GetCustomOptionSetInternal(AdhocWorkspace workspace) {
+
+
 		var options = workspace.Options;
 
+		/*Dictionary<string, bool> existsOptions = new Dictionary<string, bool>();
+         OptionSet WithChangedOption<T>(OptionSet optionSet, Option<T> option, T value) {
+            if (existsOptions.ContainsKey(option.Name))
+                return optionSet;
+            existsOptions.Add(option.Name, true);
+            return optionSet.WithChangedOption(option, value);
+        };*/
+		customOptionSetValues.Clear();
+		static OptionSet WithPerChangedOption<T>(OptionSet optionSet, PerLanguageOption<T> option, T value) {
+			return optionSet.WithChangedOption(option, LanguageNames.CSharp, value);
+
+		};
 		// --- Indentation ---
-		options = options.WithChangedOption(FormattingOptions.UseTabs, LanguageNames.CSharp, false);
-		options = options.WithChangedOption(FormattingOptions.IndentationSize, LanguageNames.CSharp, 4);
-		options = options.WithChangedOption(FormattingOptions.TabSize, LanguageNames.CSharp, 4);
+		options = WithPerChangedOption(options, FormattingOptions.UseTabs, false);
+		//options = WithPerChangedOption(options, FormattingOptions.SmartIndent, IndentStyle.Smart);
+		options = WithPerChangedOption(options, FormattingOptions.IndentationSize, 4);
+		options = WithPerChangedOption(options, FormattingOptions.TabSize, 4);
 
-		// --- Braces (Allman style) ---
-		options = options.WithChangedOption(CSharpFormattingOptions.NewLinesForBracesInTypes, true);
-		options = options.WithChangedOption(CSharpFormattingOptions.NewLinesForBracesInMethods, true);
-		options = options.WithChangedOption(CSharpFormattingOptions.NewLinesForBracesInProperties, true);
-		options = options.WithChangedOption(CSharpFormattingOptions.NewLinesForBracesInAccessors, true);
-		options = options.WithChangedOption(CSharpFormattingOptions.NewLinesForBracesInAnonymousMethods, true);
-		options = options.WithChangedOption(CSharpFormattingOptions.NewLinesForBracesInControlBlocks, true);
-		options = options.WithChangedOption(CSharpFormattingOptions.NewLinesForBracesInAnonymousTypes, true);
-		options = options.WithChangedOption(CSharpFormattingOptions.NewLinesForBracesInObjectCollectionArrayInitializers, true);
-		options = options.WithChangedOption(CSharpFormattingOptions.NewLinesForBracesInLambdaExpressionBody, true);
 
-		// --- Spacing ---
-		options = options.WithChangedOption(CSharpFormattingOptions.SpaceAfterCast, false);
-		options = options.WithChangedOption(CSharpFormattingOptions.SpaceAfterColonInBaseTypeDeclaration, true);
-		options = options.WithChangedOption(CSharpFormattingOptions.SpaceAfterComma, true);
-		options = options.WithChangedOption(CSharpFormattingOptions.SpaceAfterSemicolonsInForStatement, true);
-		options = options.WithChangedOption(CSharpFormattingOptions.SpaceBeforeColonInBaseTypeDeclaration, true);
-		options = options.WithChangedOption(CSharpFormattingOptions.SpaceBeforeSemicolonsInForStatement, false);
-		options = options.WithChangedOption(CSharpFormattingOptions.SpaceWithinExpressionParentheses, false);
-		options = options.WithChangedOption(CSharpFormattingOptions.SpaceWithinMethodDeclarationParenthesis, false);
-		options = options.WithChangedOption(CSharpFormattingOptions.SpaceWithinMethodCallParentheses, false);
-		options = options.WithChangedOption(CSharpFormattingOptions.SpaceWithinOtherParentheses, false);
-		options = options.WithChangedOption(CSharpFormattingOptions.SpaceWithinSquareBrackets, false);
+		foreach (var it in optionSetKeys) {
+			var v = options.GetOption(it.Key);
+			customOptionSetValues.Add(it.Key, v);
+			if (!v.Equals(it.Value))
+				options = options.WithChangedOption(it.Key, it.Value);
+		}
 
-		// --- Wrapping ---
-		options = options.WithChangedOption(CSharpFormattingOptions.WrappingPreserveSingleLine, true);
-		options = options.WithChangedOption(CSharpFormattingOptions.WrappingKeepStatementsOnSingleLine, true);
+
+		/*options = WithChangedOption(options, CSharpFormattingOptions.IndentBlock, false);
+        options = WithChangedOption(options, CSharpFormattingOptions.IndentSwitchSection, false);
+        options = WithChangedOption(options, CSharpFormattingOptions.IndentSwitchCaseSection, false);
+        options = WithChangedOption(options, CSharpFormattingOptions.IndentBraces, false);
+        options = WithChangedOption(options, CSharpFormattingOptions.IndentSwitchCaseSectionWhenBlock, false);
+        // --- Braces (Allman style) ---
+
+        options = WithChangedOption(options, CSharpFormattingOptions.NewLinesForBracesInTypes, false);
+        options = WithChangedOption(options, CSharpFormattingOptions.NewLinesForBracesInMethods, false);
+        options = WithChangedOption(options, CSharpFormattingOptions.NewLinesForBracesInProperties, false);
+        options = WithChangedOption(options, CSharpFormattingOptions.NewLineForMembersInObjectInit, false);
+        options = WithChangedOption(options, CSharpFormattingOptions.NewLinesForBracesInAccessors, false);
+        options = WithChangedOption(options, CSharpFormattingOptions.NewLineForClausesInQuery, false);
+        options = WithChangedOption(options, CSharpFormattingOptions.NewLineForMembersInAnonymousTypes, false);
+        options = WithChangedOption(options, CSharpFormattingOptions.NewLinesForBracesInAnonymousMethods, false);
+        options = WithChangedOption(options, CSharpFormattingOptions.NewLinesForBracesInControlBlocks, false);
+        options = WithChangedOption(options, CSharpFormattingOptions.NewLinesForBracesInAnonymousTypes, false);
+        options = WithChangedOption(options, CSharpFormattingOptions.NewLinesForBracesInObjectCollectionArrayInitializers, false);
+        options = WithChangedOption(options, CSharpFormattingOptions.NewLinesForBracesInLambdaExpressionBody, false);
+
+        // --- Spacing ---
+        options = WithChangedOption(options, CSharpFormattingOptions.SpaceBetweenEmptyMethodDeclarationParentheses, false);
+        options = WithChangedOption(options, CSharpFormattingOptions.SpaceBetweenEmptyMethodCallParentheses, false);
+        options = WithChangedOption(options, CSharpFormattingOptions.SpaceAfterCast, false);
+        options = WithChangedOption(options, CSharpFormattingOptions.SpaceAfterColonInBaseTypeDeclaration, false);
+        options = WithChangedOption(options, CSharpFormattingOptions.SpaceAfterComma, true);
+        options = WithChangedOption(options, CSharpFormattingOptions.SpaceAfterSemicolonsInForStatement, false);
+        options = WithChangedOption(options, CSharpFormattingOptions.SpaceBeforeColonInBaseTypeDeclaration, false);
+        options = WithChangedOption(options, CSharpFormattingOptions.SpaceBeforeSemicolonsInForStatement, false);
+        options = WithChangedOption(options, CSharpFormattingOptions.SpaceWithinExpressionParentheses, false);
+        options = WithChangedOption(options, CSharpFormattingOptions.SpaceWithinMethodDeclarationParenthesis, false);
+        options = WithChangedOption(options, CSharpFormattingOptions.SpaceWithinMethodCallParentheses, false);
+        options = WithChangedOption(options, CSharpFormattingOptions.SpaceWithinOtherParentheses, false);
+        options = WithChangedOption(options, CSharpFormattingOptions.SpaceWithinSquareBrackets, false);
+        options = WithChangedOption(options, CSharpFormattingOptions.SpacingAfterMethodDeclarationName, false);
+        options = WithChangedOption(options, CSharpFormattingOptions.SpaceAfterMethodCallName, false);
+        options = WithChangedOption(options, CSharpFormattingOptions.SpaceAfterControlFlowStatementKeyword, false);
+        options = WithChangedOption(options, CSharpFormattingOptions.SpaceWithinCastParentheses, false);
+        options = WithChangedOption(options, CSharpFormattingOptions.SpacesIgnoreAroundVariableDeclaration, false);
+        options = WithChangedOption(options, CSharpFormattingOptions.SpaceBeforeOpenSquareBracket, false);
+        options = WithChangedOption(options, CSharpFormattingOptions.SpaceBetweenEmptySquareBrackets, false);
+        options = WithChangedOption(options, CSharpFormattingOptions.SpaceAfterDot, false);
+        options = WithChangedOption(options, CSharpFormattingOptions.SpaceBeforeComma, false);
+        options = WithChangedOption(options, CSharpFormattingOptions.SpaceBeforeDot, false);
+
+        // --- Wrapping ---
+        options = WithChangedOption(options, CSharpFormattingOptions.WrappingPreserveSingleLine, true);
+        options = WithChangedOption(options, CSharpFormattingOptions.WrappingKeepStatementsOnSingleLine, true);
+
+        // Other block formatting
+
+
+        options = WithChangedOption(options, CSharpFormattingOptions.NewLineForElse, false);
+        options = WithChangedOption(options, CSharpFormattingOptions.NewLineForCatch, false);
+        options = WithChangedOption(options, CSharpFormattingOptions.NewLineForFinally, false);*/
+
+
 
 		return options;
 	}

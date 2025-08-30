@@ -23,6 +23,7 @@
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SummaryCommentForm));
 			this.solutionGroup = new System.Windows.Forms.GroupBox();
 			this.txtRootDirectory = new System.Windows.Forms.TextBox();
 			this.browseButton = new System.Windows.Forms.Button();
@@ -43,11 +44,11 @@
 			this.returnTemplateLabel = new System.Windows.Forms.Label();
 			this.returnTemplate = new System.Windows.Forms.TextBox();
 			this.progressGroup = new System.Windows.Forms.GroupBox();
+			this.txtPocoEditor = new System.Windows.Forms.RichTextBox();
 			this.progressBar = new System.Windows.Forms.ProgressBar();
 			this.statusLabel = new System.Windows.Forms.Label();
 			this.processButton = new System.Windows.Forms.Button();
 			this.cancelButton = new System.Windows.Forms.Button();
-			this.txtPocoEditor = new System.Windows.Forms.RichTextBox();
 			this.solutionGroup.SuspendLayout();
 			this.optionsGroup.SuspendLayout();
 			this.templatesGroup.SuspendLayout();
@@ -295,6 +296,22 @@
 			this.progressGroup.TabStop = false;
 			this.progressGroup.Text = "Progress";
 			// 
+			// txtPocoEditor
+			// 
+			this.txtPocoEditor.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.txtPocoEditor.BackColor = System.Drawing.Color.White;
+			this.txtPocoEditor.DetectUrls = false;
+			this.txtPocoEditor.Font = new System.Drawing.Font("Consolas", 12F);
+			this.txtPocoEditor.Location = new System.Drawing.Point(28, 75);
+			this.txtPocoEditor.Name = "txtPocoEditor";
+			this.txtPocoEditor.ReadOnly = true;
+			this.txtPocoEditor.Size = new System.Drawing.Size(812, 244);
+			this.txtPocoEditor.TabIndex = 35;
+			this.txtPocoEditor.Text = "";
+			this.txtPocoEditor.WordWrap = false;
+			// 
 			// progressBar
 			// 
 			this.progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -346,22 +363,6 @@
 			this.cancelButton.UseVisualStyleBackColor = false;
 			this.cancelButton.Click += new System.EventHandler(this.CancelButton_Click);
 			// 
-			// txtPocoEditor
-			// 
-			this.txtPocoEditor.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.txtPocoEditor.BackColor = System.Drawing.Color.White;
-			this.txtPocoEditor.DetectUrls = false;
-			this.txtPocoEditor.Font = new System.Drawing.Font("Consolas", 12F);
-			this.txtPocoEditor.Location = new System.Drawing.Point(28, 75);
-			this.txtPocoEditor.Name = "txtPocoEditor";
-			this.txtPocoEditor.ReadOnly = true;
-			this.txtPocoEditor.Size = new System.Drawing.Size(812, 244);
-			this.txtPocoEditor.TabIndex = 35;
-			this.txtPocoEditor.Text = "";
-			this.txtPocoEditor.WordWrap = false;
-			// 
 			// SummaryCommentForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -375,6 +376,7 @@
 			this.Controls.Add(this.processButton);
 			this.Controls.Add(this.cancelButton);
 			this.ForeColor = System.Drawing.Color.White;
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.Name = "SummaryCommentForm";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
